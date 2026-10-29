@@ -27,7 +27,7 @@ Output arrives as a ZIP named `<app-name>-simple.zip` or `<app-name>-complete.zi
   - Key Usage (critical): `keyCertSign, cRLSign` on the root; `digitalSignature, keyEncipherment` on the server leaf; `digitalSignature` on the client leaf.
   - Subject Alternative Name (non-critical): one `dNSName` entry, emitted only when the app name is a syntactically valid DNS name. The client certificate never carries a SAN.
   - Extended Key Usage (non-critical): `serverAuth` on the server leaf, `clientAuth` on the client leaf. The root carries no EKU.
-- Validity: root 3650 days, leaves 365 days. `notBefore` is set one day before generation time to tolerate clock skew.
+- Validity: 36500 days (100 years) for the root and leaves. `notBefore` is set one day before generation time to tolerate clock skew. Dates from 2050 onward are encoded as `GeneralizedTime`, earlier dates as `UTCTime`.
 - Serial numbers are 16 random bytes with the sign bit cleared.
 - The ZIP container is written by hand in the page: stored entries, no compression, CRC-32 checksums, UTF-8 filename flag.
 
