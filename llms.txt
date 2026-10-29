@@ -1,0 +1,46 @@
+# Cert Jenna
+
+> Cert Jenna is a single-page, fully client-side web tool that generates self-signed X.509 certificates for local development. Keys are created in the browser with the Web Crypto API and downloaded as a ZIP. No server, no account, no network requests.
+
+It is a joke-flavoured front end for a practical idea: get a usable `server.crt` / `server.key` pair for `my-app.local` in two clicks, without installing mkcert or remembering `openssl req` flags. Everything happens in the page, and private keys never leave the tab except through the download button.
+
+The wordmark on the page styles the name as Cert(ificate) Jenna(rator). That is decoration; the application is called Cert Jenna.
+
+## Tool
+
+- [Cert Jenna](https://bitbronze.github.io/cert-jenna/): the generator itself. Enter an app name, then pick Gen Simple or Gen Complete.
+
+## Modes
+
+- **Gen Simple** — downloads `server.crt` and `server.key`. The server certificate is signed by a root CA that is generated and then discarded, so the bundle contains no issuing certificate and nothing can chain or verify against it. Intended for throwaway local TLS.
+- **Gen Complete** — downloads `root.crt`, `root.key`, `server.crt`, `server.key`, `client.crt` and `client.key`. The root is a real CA certificate you can import into a trust store, and the server and client leaves chain to it. Also usable for mutual TLS testing.
+
+Output arrives as a ZIP named `<app-name>-simple.zip` or `<app-name>-complete.zip`.
+
+## Technical details
+
+- Key algorithm: RSA 2048-bit, public exponent 65537, signatures over RSASSA-PKCS1-v1_5 with SHA-256 (`1.2.840.113549.1.1.11`).
+- Certificates are PEM-encoded DER; private keys are exported as PKCS#8 PEM (`-----BEGIN PRIVATE KEY-----`).
+- Subject and issuer distinguished names contain a single `CN` (UTF8String) attribute and nothing else — no O, OU, C, ST or L.
+- Certificates are X.509 version 3 and carry only four extensions:
+  - Basic Constraints (critical): `CA:TRUE` on the root, `CA:FALSE` on leaves. No path length constraint.
+  - Key Usage (critical): `keyCertSign, cRLSign` on the root; `digitalSignature, keyEncipherment` on the server leaf; `digitalSignature` on the client leaf.
+  - Subject Alternative Name (non-critical): one `dNSName` entry, emitted only when the app name is a syntactically valid DNS name. The client certificate never carries a SAN.
+  - Extended Key Usage (non-critical): `serverAuth` on the server leaf, `clientAuth` on the client leaf. The root carries no EKU.
+- Validity: root 3650 days, leaves 365 days. `notBefore` is set one day before generation time to tolerate clock skew.
+- Serial numbers are 16 random bytes with the sign bit cleared.
+- The ZIP container is written by hand in the page: stored entries, no compression, CRC-32 checksums, UTF-8 filename flag.
+
+## Known limitations
+
+- No Subject Key Identifier, Authority Key Identifier or CRL Distribution Points are emitted, so strict chain validators may warn.
+- No OCSP or CRL support, and nothing is installed into a trust store automatically.
+- RSA only — no ECDSA or Ed25519.
+- One app name per run; it becomes the CN and, when valid, the SAN.
+- Web Crypto requires a secure context, so generation only works over HTTPS or on `localhost`.
+- Gen Simple output cannot be trusted by anything, including by adding it to a trust store, because its issuing root is never written to the ZIP.
+
+## Other files
+
+- [Sitemap](https://bitbronze.github.io/cert-jenna/sitemap.xml)
+- [robots.txt](https://bitbronze.github.io/cert-jenna/robots.txt)
