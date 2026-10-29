@@ -3,18 +3,28 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Cert Jenna: self-signed certificates generated in browser.">
-  <title>Cert Jenna — Self-signed, in browser</title>
+  <meta name="description" content="Generate a self-signed X.509 certificate for local development right in your browser. RSA-2048, SHA-256, PKCS#8 keys, packaged as a ZIP. No server, no signup, no upload.">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+  <title>Cert Jenna — Self-signed certificates, in browser</title>
   <link rel="canonical" href="https://bitbronze.github.io/cert-jenna/">
+  <link rel="alternate" type="text/plain" href="https://bitbronze.github.io/cert-jenna/llms.txt" title="Plain-text summary for language models">
   <meta name="theme-color" content="#f3efe5">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Cert Jenna">
-  <meta property="og:title" content="Cert Jenna — Self-signed, in browser">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:title" content="Cert Jenna — Self-signed certificates, in browser">
   <meta property="og:description" content="Self-signed certificates for local development, generated in your browser with Web Crypto. No server, no signup, no lingering root authority.">
   <meta property="og:url" content="https://bitbronze.github.io/cert-jenna/">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Cert Jenna">
+  <meta property="og:image" content="https://bitbronze.github.io/cert-jenna/og-image.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Cert Jenna wordmark on a cream grid background. Tagline: self-signed certificates for local development, generated in your browser.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Cert Jenna — Self-signed certificates, in browser">
   <meta name="twitter:description" content="Self-signed certificates for local development, generated in your browser with Web Crypto.">
+  <meta name="twitter:image" content="https://bitbronze.github.io/cert-jenna/og-image.png">
+  <meta name="twitter:image:alt" content="Cert Jenna wordmark on a cream grid background. Tagline: self-signed certificates for local development, generated in your browser.">
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23ff5c35'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='28' font-weight='700' text-anchor='middle' fill='%23171717'%3ECJ%3C/text%3E%3C/svg%3E">
 
@@ -25,6 +35,12 @@
       "name": "Cert Jenna",
       "alternateName": "Cert(ificate) Jenna(rator)",
       "url": "https://bitbronze.github.io/cert-jenna/",
+      "sameAs": [
+        "https://github.com/bitbronze/cert-jenna"
+      ],
+      "codeRepository": "https://github.com/bitbronze/cert-jenna",
+      "image": "https://bitbronze.github.io/cert-jenna/og-image.png",
+      "screenshot": "https://bitbronze.github.io/cert-jenna/og-image.png",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Any",
       "browserRequirements": "Requires Web Crypto, so HTTPS or localhost",
@@ -43,7 +59,62 @@
       ]
     }
   </script>
-  <style>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is a self-signed certificate?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A certificate that signs itself instead of being signed by a public certificate authority. Nothing trusts it until you import it, which is exactly what makes it useful for local development: no public CA, no DNS challenge, no waiting."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I use the certificate for local HTTPS?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Generate the Complete bundle, import root.crt into your operating system or browser trust store, then point your dev server at server.crt and server.key. Use Simple when you only need a throwaway server pair and can live with the browser warning."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is Cert Jenna a mkcert alternative?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "For the common case of needing a certificate for something like my-app.local, yes. The differences are that it runs entirely in the browser so there is nothing to install, and the Complete bundle also includes a client certificate for mutual TLS testing."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Where do the private keys go?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Nowhere. Keys are generated with Web Crypto inside this tab and written straight into the ZIP you download. The page makes no network requests and has no backend."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What certificate format do I get?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "PEM-encoded X.509 certificates and PKCS#8 private keys, which nginx, Caddy, Node, Python and most other servers read directly. Files arrive in a ZIP named app-name-simple.zip or app-name-complete.zip."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need to install anything?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Cert Jenna is a single static HTML page. It needs a secure context for Web Crypto, so open it over HTTPS or from localhost, then enter a name and pick a bundle."
+          }
+        }
+      ]
+    }
+  </script>
     :root {
       color-scheme: light;
       --ink: #171717;
