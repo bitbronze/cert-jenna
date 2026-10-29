@@ -641,6 +641,8 @@
       subjectAltName: "2.5.29.17"
     };
 
+    const CERT_LIFETIME_DAYS = 36500;
+
     function concat(...parts) {
       let length = 0;
       for (const part of parts) length += part.length;
@@ -744,11 +746,28 @@
       return tlv(0x17, encoder.encode(value));
     }
 
+    function generalizedTime(date) {
+      const iso = date.toISOString();
+      const value =
+        iso.slice(0, 4) +
+        iso.slice(5, 7) +
+        iso.slice(8, 10) +
+        iso.slice(11, 13) +
+        iso.slice(14, 16) +
+        iso.slice(17, 19) +
+        "Z";
+      return tlv(0x18, encoder.encode(value));
+    }
+
+    function time(date) {
+      return date.getUTCFullYear() >= 2050 ? generalizedTime(date) : utcTime(date);
+    }
+
     function validity(days) {
       const now = Date.now();
       const notBefore = new Date(now - 24 * 60 * 60 * 1000);
       const notAfter = new Date(now + days * 24 * 60 * 60 * 1000);
-      return sequence(utcTime(notBefore), utcTime(notAfter));
+      return sequence(time(notBefore), time(notAfter));
     }
 
     function basicConstraints(isCA) {
@@ -876,7 +895,7 @@
         publicKey: serverPublicKey,
         signingKey: rootKeys.privateKey,
         isCA: false,
-        days: 365,
+        days: CERT_LIFETIME_DAYS,
         serverName: isDnsName(appName) ? appName : null,
         extendedKeyUsage: OID.serverAuth
       });
@@ -903,7 +922,7 @@
         publicKey: rootPublicKey,
         signingKey: rootKeys.privateKey,
         isCA: true,
-        days: 3650
+        days: CERT_LIFETIME_DAYS
       });
 
       const serverCertificate = await createCertificate({
@@ -912,7 +931,7 @@
         publicKey: serverPublicKey,
         signingKey: rootKeys.privateKey,
         isCA: false,
-        days: 365,
+        days: CERT_LIFETIME_DAYS,
         serverName: isDnsName(appName) ? appName : null,
         extendedKeyUsage: OID.serverAuth
       });
@@ -924,7 +943,7 @@
         signingKey: rootKeys.privateKey,
         isCA: false,
         isClient: true,
-        days: 365,
+        days: CERT_LIFETIME_DAYS,
         extendedKeyUsage: OID.clientAuth
       });
 
