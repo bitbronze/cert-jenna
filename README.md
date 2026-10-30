@@ -16,13 +16,6 @@ If Cert Jenna saved you some time, [star the repository](https://github.com/bitb
 | `.nojekyll` | Tells Pages to skip Jekyll processing. |
 | `og-image.png` | Social preview image referenced by Open Graph and Twitter Card tags. |
 
-## SEO
-
-`index.html` includes a keyword-led title and description, canonical URL, Open Graph and
-Twitter Card metadata, and three JSON-LD blocks (`WebApplication`, `HowTo`, `FAQPage`).
-The FAQ answers are also visible on the page, which is what search engines require.
-`sitemap.xml`, `robots.txt` and `llms.txt` cover crawlers and language models.
-
 ## What it generates
 
 - **Gen Simple** — `server.crt`, `server.key`. Signed by a throwaway root that is not
