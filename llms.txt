@@ -4,11 +4,16 @@
 
 It is a joke-flavoured front end for a practical idea: get a usable `server.crt` / `server.key` pair for `my-app.local` in two clicks, without installing mkcert or remembering `openssl req` flags. Everything happens in the page, and private keys never leave the tab except through the download button.
 
+The page is open source at https://github.com/bitbronze/cert-jenna, with a "star it on GitHub" button in the header and footer for visitors who found it useful.
+
 The wordmark on the page styles the name as Cert(ificate) Jenna(rator). That is decoration; the application is called Cert Jenna.
 
 ## Tool
 
 - [Cert Jenna](https://bitbronze.github.io/cert-jenna/): the generator itself. Enter an app name, then pick Gen Simple or Gen Complete.
+- [GitHub repository](https://github.com/bitbronze/cert-jenna): source for the single-page app, issues and stars.
+
+The page also contains a three-step how-to for local HTTPS, a comparison table against mkcert and `openssl req`, and a visible FAQ that mirrors the `FAQPage` structured data.
 
 ## Modes
 

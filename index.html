@@ -3,26 +3,29 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Generate a self-signed X.509 certificate for local development right in your browser. RSA-2048, SHA-256, PKCS#8 keys, packaged as a ZIP. No server, no signup, no upload.">
-  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
-  <title>Cert Jenna — Self-signed certificates, in browser</title>
+  <meta name="description" content="Free self-signed certificate generator for local HTTPS. RSA-2048, SHA-256, PEM, PKCS#8 files in a ZIP, made in your browser. No upload, no signup, no install.">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="author" content="Cert Jenna contributors">
+  <meta name="application-name" content="Cert Jenna">
+  <title>Self-Signed Certificate Generator — Cert Jenna</title>
   <link rel="canonical" href="https://bitbronze.github.io/cert-jenna/">
   <link rel="alternate" type="text/plain" href="https://bitbronze.github.io/cert-jenna/llms.txt" title="Plain-text summary for language models">
   <meta name="theme-color" content="#f3efe5">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Cert Jenna">
   <meta property="og:locale" content="en_US">
-  <meta property="og:title" content="Cert Jenna — Self-signed certificates, in browser">
-  <meta property="og:description" content="Self-signed certificates for local development, generated in your browser with Web Crypto. No server, no signup, no lingering root authority.">
+  <meta property="og:title" content="Self-Signed Certificate Generator — Cert Jenna">
+  <meta property="og:description" content="Create a self-signed X.509 certificate for localhost and *.local in your browser with Web Crypto. RSA-2048, SHA-256, PKCS#8 keys, ZIP download. No server, no signup, no mkcert install.">
   <meta property="og:url" content="https://bitbronze.github.io/cert-jenna/">
   <meta property="og:image" content="https://bitbronze.github.io/cert-jenna/og-image.png">
+  <meta property="og:image:secure_url" content="https://bitbronze.github.io/cert-jenna/og-image.png">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Cert Jenna wordmark on a cream grid background. Tagline: self-signed certificates for local development, generated in your browser.">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Cert Jenna — Self-signed certificates, in browser">
-  <meta name="twitter:description" content="Self-signed certificates for local development, generated in your browser with Web Crypto.">
+  <meta name="twitter:title" content="Self-Signed Certificate Generator — Cert Jenna">
+  <meta name="twitter:description" content="Create a self-signed X.509 certificate for localhost and *.local in your browser. RSA-2048, SHA-256, PEM + PKCS#8 in a ZIP. No upload, no signup.">
   <meta name="twitter:image" content="https://bitbronze.github.io/cert-jenna/og-image.png">
   <meta name="twitter:image:alt" content="Cert Jenna wordmark on a cream grid background. Tagline: self-signed certificates for local development, generated in your browser.">
 
@@ -42,8 +45,12 @@
       "image": "https://bitbronze.github.io/cert-jenna/og-image.png",
       "screenshot": "https://bitbronze.github.io/cert-jenna/og-image.png",
       "applicationCategory": "DeveloperApplication",
+      "applicationSubCategory": "Security",
       "operatingSystem": "Any",
       "browserRequirements": "Requires Web Crypto, so HTTPS or localhost",
+      "inLanguage": "en",
+      "dateModified": "2026-10-30",
+      "keywords": "self-signed certificate, self-signed certificate generator, X.509, local HTTPS, mkcert alternative, Web Crypto, RSA-2048, mutual TLS, localhost certificate",
       "description": "Generates self-signed X.509 certificates for local development entirely in the browser. RSA-2048 keys, SHA-256 signatures, PKCS#8 private keys, delivered as a ZIP.",
       "isAccessibleForFree": true,
       "offers": {
@@ -115,6 +122,46 @@
       ]
     }
   </script>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      "name": "How to create a self-signed certificate for local HTTPS",
+      "description": "Generate a self-signed X.509 certificate in your browser and use it to serve HTTPS on localhost or a .local hostname.",
+      "totalTime": "PT2M",
+      "estimatedCost": {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "value": "0"
+      },
+      "tool": [
+        {
+          "@type": "HowToTool",
+          "name": "A modern browser with Web Crypto (Chrome, Edge, Firefox or Safari)"
+        }
+      ],
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "name": "Name your app",
+          "text": "Enter the hostname your dev server uses, such as my-app.local or localhost. It becomes the certificate common name (CN) and, when valid, the subject alternative name (SAN)."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "name": "Pick a bundle",
+          "text": "Choose Gen Simple for a throwaway server certificate and key, or Gen Complete to also get a root CA and a client certificate for mutual TLS."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "name": "Trust the root and configure your server",
+          "text": "Import root.crt into your operating system or browser trust store, then point nginx, Caddy, Node or Python at server.crt and server.key."
+        }
+      ]
+    }
+  </script>
   <style>
     :root {
       color-scheme: light;
@@ -131,6 +178,18 @@
 
     * {
       box-sizing: border-box;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      border: 0;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
     }
 
     html {
@@ -182,6 +241,7 @@
 
     .brand-row {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       gap: 1rem;
       margin-bottom: 1.5rem;
@@ -502,6 +562,17 @@
       font-weight: 900;
     }
 
+    #status a {
+      color: var(--ink);
+      font-weight: 900;
+      text-underline-offset: 2px;
+    }
+
+    #status a:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 2px;
+    }
+
     #status[data-state="error"]::before {
       display: grid;
       flex: 0 0 auto;
@@ -561,16 +632,275 @@
       color: var(--ink);
     }
 
+    .note code {
+      padding: 0.08em 0.32em;
+      border-radius: 4px;
+      background: rgba(23, 23, 23, 0.08);
+      color: var(--ink);
+      font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+      font-size: 0.9em;
+    }
+
     .joke-line {
       margin-top: 0.7rem;
       padding-top: 0.7rem;
       border-top: 1.5px dashed rgba(23, 23, 23, 0.3);
     }
 
+    .star-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      margin-left: auto;
+      padding: 0.55rem 0.9rem;
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      background: var(--lemon);
+      color: var(--ink);
+      box-shadow: 3px 3px 0 var(--ink);
+      font-size: 0.78rem;
+      font-weight: 800;
+      line-height: 1.25;
+      text-decoration: none;
+      transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease;
+    }
+
+    .star-btn:hover {
+      background: var(--mint);
+      box-shadow: 5px 5px 0 var(--ink);
+      transform: translate(-2px, -2px);
+    }
+
+    .star-btn:active {
+      box-shadow: 1px 1px 0 var(--ink);
+      transform: translate(2px, 2px);
+    }
+
+    .star-btn:focus-visible {
+      outline: 3px solid var(--ink);
+      outline-offset: 3px;
+    }
+
+    .star-btn svg {
+      flex: 0 0 auto;
+      width: 18px;
+      height: 18px;
+      fill: var(--accent);
+      stroke: var(--ink);
+      stroke-linejoin: round;
+      stroke-width: 1.5;
+    }
+
+    .star-btn strong {
+      font-weight: 900;
+    }
+
+    .panel {
+      margin-top: clamp(1.5rem, 4vw, 2.5rem);
+      padding: clamp(1.2rem, 3.4vw, 2.2rem);
+      border: 2px solid var(--ink);
+      border-radius: 26px;
+      background: var(--card);
+      box-shadow: 10px 10px 0 var(--ink);
+    }
+
+    .panel > h2 {
+      margin: 0 0 1rem;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.45rem, 3vw, 2rem);
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+    }
+
+    .panel p,
+    .panel li {
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .panel p {
+      margin: 0.7rem 0 0;
+    }
+
+    .panel code {
+      padding: 0.08em 0.32em;
+      border-radius: 4px;
+      background: #f0ece2;
+      color: var(--ink);
+      font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+      font-size: 0.9em;
+    }
+
+    .steps {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: step;
+    }
+
+    .steps li {
+      position: relative;
+      margin-top: 0.85rem;
+      padding-left: 2.6rem;
+      line-height: 1.55;
+    }
+
+    .steps li::before {
+      position: absolute;
+      top: -0.05rem;
+      left: 0;
+      display: grid;
+      width: 1.8rem;
+      height: 1.8rem;
+      border: 1.5px solid var(--ink);
+      border-radius: 50%;
+      background: var(--accent);
+      color: var(--ink);
+      content: counter(step);
+      counter-increment: step;
+      font-size: 0.78rem;
+      font-weight: 900;
+      place-items: center;
+    }
+
+    .steps li:nth-child(2)::before {
+      background: var(--mint);
+    }
+
+    .steps li:nth-child(3)::before {
+      background: var(--lemon);
+    }
+
+    .steps strong,
+    .faq summary {
+      color: var(--ink);
+      font-weight: 800;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin-top: 1rem;
+      border: 1.5px solid var(--ink);
+      border-radius: 16px;
+    }
+
+    table {
+      width: 100%;
+      min-width: 34rem;
+      border-collapse: collapse;
+      font-size: 0.86rem;
+    }
+
+    caption {
+      padding: 0.7rem 0.85rem;
+      border-bottom: 1.5px solid var(--ink);
+      color: var(--muted);
+      font-size: 0.76rem;
+      text-align: left;
+    }
+
+    th,
+    td {
+      padding: 0.65rem 0.85rem;
+      border-bottom: 1px solid rgba(23, 23, 23, 0.14);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    thead th {
+      background: var(--lemon);
+      font-size: 0.7rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    tbody th {
+      color: var(--ink);
+      font-weight: 800;
+    }
+
+    tbody tr:last-child th,
+    tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .faq details {
+      border-bottom: 1.5px dashed rgba(23, 23, 23, 0.3);
+    }
+
+    .faq details:last-of-type {
+      border-bottom: 0;
+    }
+
+    .faq summary {
+      position: relative;
+      padding: 0.85rem 0 0.85rem 1.4rem;
+      font-size: 0.95rem;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .faq summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq summary::before {
+      position: absolute;
+      left: 0;
+      content: "+";
+      font-weight: 900;
+    }
+
+    .faq details[open] summary::before {
+      content: "−";
+    }
+
+    .faq summary:focus-visible {
+      border-radius: 6px;
+      outline: 3px solid var(--ink);
+      outline-offset: 3px;
+    }
+
+    .faq details p {
+      margin: 0 0 0.9rem 1.4rem;
+      line-height: 1.55;
+    }
+
+    .site-footer {
+      margin-top: clamp(1.5rem, 4vw, 2.5rem);
+      padding: 1.2rem 0 0.5rem;
+      border-top: 1.5px dashed rgba(23, 23, 23, 0.3);
+      color: var(--muted);
+      font-size: 0.84rem;
+      text-align: center;
+    }
+
+    .site-footer p {
+      margin: 0.35rem 0;
+    }
+
+    .site-footer a {
+      color: var(--ink);
+      font-weight: 700;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+    }
+
+    .site-footer a:hover {
+      background: var(--accent-soft);
+    }
+
+    .site-footer a:focus-visible {
+      outline: 3px solid var(--ink);
+      outline-offset: 3px;
+    }
+
     @media (prefers-reduced-motion: no-preference) {
       .hero,
       .generator,
-      .notes {
+      .notes,
+      .panel {
         animation: rise 500ms ease both;
       }
 
@@ -580,6 +910,10 @@
 
       .notes {
         animation-delay: 140ms;
+      }
+
+      .panel {
+        animation-delay: 210ms;
       }
     }
 
@@ -616,6 +950,10 @@
       .actions {
         grid-template-columns: 1fr;
       }
+
+      .star-btn {
+        margin-left: 0;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -636,9 +974,16 @@
       <div class="brand-row">
         <div class="brand-mark" aria-hidden="true">CJ</div>
         <p class="kicker">Self-signed · In browser</p>
+        <a class="star-btn" href="https://github.com/bitbronze/cert-jenna" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M12 2.6l2.85 5.78 6.38.93-4.62 4.5 1.09 6.36L12 17.17l-5.7 3l1.09-6.36-4.62-4.5 6.38-.93z"/>
+          </svg>
+          <span>If you used this, <strong>star it on GitHub</strong></span>
+        </a>
       </div>
 
       <h1>
+        <span class="sr-only">Self-signed certificate generator: </span>
         <span class="title-line">Cert<span class="paren">(ificate)</span></span>
         <span class="title-line">Jenna<span class="paren">(rator)</span></span>
       </h1>
@@ -657,7 +1002,7 @@
 
     <section class="generator" aria-labelledby="generatorTitle">
       <div class="section-head">
-        <h2 id="generatorTitle">Make a cert</h2>
+        <h2 id="generatorTitle">Make a self-signed cert</h2>
         <p>Only the common name is filled in. Everything else stays blank—that's the brief.</p>
       </div>
 
@@ -687,11 +1032,116 @@
     <aside class="notes" aria-label="Fine print and joke">
       <div class="note">
         <p class="note-label">Fine print</p>
-        <p>Private keys never leave this tab—except through the download button, obviously. Everything is generated <strong>in browser</strong> with Web Crypto.</p>
+        <p><strong>Cert Jenna is a free self-signed certificate generator</strong> for local HTTPS. It creates X.509 SSL/TLS certificates for <code>localhost</code> and <code>.local</code> hostnames, with RSA-2048 keys and SHA-256 signatures—a browser-based alternative to mkcert or an <code>openssl req</code> command.</p>
+        <p>Private keys never leave this tab—except through the download button, obviously. Everything is generated <strong>in browser</strong> with Web Crypto, so there is no upload, no account, and no backend.</p>
         <p class="joke-line"><strong>Self-signed, in browser.</strong> No servers were contacted. One throwaway root was briefly employed, then released with a small severance package.</p>
       </div>
     </aside>
+
+    <section class="panel" aria-labelledby="howTitle">
+      <h2 id="howTitle">How to use a self-signed certificate for local HTTPS</h2>
+      <ol class="steps">
+        <li>
+          <strong>Name your app.</strong> Enter the hostname your dev server uses, like
+          <code>my-app.local</code> or <code>localhost</code>. It becomes the certificate's
+          common name (CN) and, when it is a valid DNS name, the subject alternative name (SAN).
+        </li>
+        <li>
+          <strong>Pick a bundle.</strong> Gen Simple gives you a throwaway
+          <code>server.crt</code> and <code>server.key</code>. Gen Complete adds a root CA and a
+          client certificate for mutual TLS.
+        </li>
+        <li>
+          <strong>Trust the root, then configure your server.</strong> Import
+          <code>root.crt</code> into your operating system or browser trust store, then point
+          nginx, Caddy, Node, or Python at <code>server.crt</code> and <code>server.key</code>.
+        </li>
+      </ol>
+    </section>
+
+    <section class="panel" aria-labelledby="compareTitle">
+      <h2 id="compareTitle">Cert Jenna vs. mkcert vs. openssl</h2>
+      <div class="table-wrap">
+        <table>
+          <caption>Local development certificate workflows, compared.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Feature</th>
+              <th scope="col">Cert Jenna</th>
+              <th scope="col">mkcert</th>
+              <th scope="col">openssl req</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Install required</th>
+              <td>None — open this page</td>
+              <td>Binary, plus <code>mkcert -install</code></td>
+              <td>OpenSSL</td>
+            </tr>
+            <tr>
+              <th scope="row">Keys generated</th>
+              <td>In your browser tab</td>
+              <td>On your machine</td>
+              <td>On your machine</td>
+            </tr>
+            <tr>
+              <th scope="row">Root CA included</th>
+              <td>Yes, in Gen Complete</td>
+              <td>Yes</td>
+              <td>No, by default</td>
+            </tr>
+            <tr>
+              <th scope="row">Client certificate (mTLS)</th>
+              <td>Yes, in Gen Complete</td>
+              <td>No</td>
+              <td>Manual</td>
+            </tr>
+            <tr>
+              <th scope="row">Output</th>
+              <td>ZIP of PEM files</td>
+              <td>PEM files</td>
+              <td>PEM files</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>mkcert is a good tool for machine-wide local CAs. Cert Jenna is for when you want the files without installing anything, and for mutual TLS testing.</p>
+    </section>
+
+    <section class="panel faq" aria-labelledby="faqTitle">
+      <h2 id="faqTitle">Frequently asked questions</h2>
+      <details open>
+        <summary>What is a self-signed certificate?</summary>
+        <p>A certificate that signs itself instead of being signed by a public certificate authority. Nothing trusts it until you import it, which is exactly what makes it useful for local development: no public CA, no DNS challenge, no waiting.</p>
+      </details>
+      <details>
+        <summary>How do I use the certificate for local HTTPS?</summary>
+        <p>Generate the Complete bundle, import <code>root.crt</code> into your operating system or browser trust store, then point your dev server at <code>server.crt</code> and <code>server.key</code>. Use Simple when you only need a throwaway server pair and can live with the browser warning.</p>
+      </details>
+      <details>
+        <summary>Is Cert Jenna a mkcert alternative?</summary>
+        <p>For the common case of needing a certificate for something like <code>my-app.local</code>, yes. The differences are that it runs entirely in the browser so there is nothing to install, and the Complete bundle also includes a client certificate for mutual TLS testing.</p>
+      </details>
+      <details>
+        <summary>Where do the private keys go?</summary>
+        <p>Nowhere. Keys are generated with Web Crypto inside this tab and written straight into the ZIP you download. The page makes no network requests and has no backend.</p>
+      </details>
+      <details>
+        <summary>What certificate format do I get?</summary>
+        <p>PEM-encoded X.509 certificates and PKCS#8 private keys, which nginx, Caddy, Node, Python and most other servers read directly. Files arrive in a ZIP named <code>app-name-simple.zip</code> or <code>app-name-complete.zip</code>.</p>
+      </details>
+      <details>
+        <summary>Do I need to install anything?</summary>
+        <p>No. Cert Jenna is a single static HTML page. It needs a secure context for Web Crypto, so open it over HTTPS or from localhost, then enter a name and pick a bundle.</p>
+      </details>
+    </section>
   </main>
+
+  <footer class="shell site-footer">
+    <p>Cert Jenna is free and open source. If it saved you an OpenSSL incantation, <a href="https://github.com/bitbronze/cert-jenna">star it on GitHub</a>.</p>
+    <p><a href="https://github.com/bitbronze/cert-jenna">GitHub</a> · <a href="https://bitbronze.github.io/cert-jenna/llms.txt">llms.txt</a> · <a href="https://bitbronze.github.io/cert-jenna/sitemap.xml">Sitemap</a></p>
+  </footer>
 
   <script>
     "use strict";
@@ -1187,6 +1637,12 @@
         const filename = safeFilename(appName) + "-" + mode + ".zip";
         download(filename, zip);
         setStatus("Downloaded " + filename + ". Check your downloads.", "success");
+        const starLink = document.createElement("a");
+        starLink.href = "https://github.com/bitbronze/cert-jenna";
+        starLink.target = "_blank";
+        starLink.rel = "noopener noreferrer";
+        starLink.textContent = "Star it on GitHub";
+        statusElement.append(" ", starLink);
       } catch (error) {
         setStatus("Error: " + (error && error.message ? error.message : String(error)), "error");
       } finally {
