@@ -1018,7 +1018,7 @@
       <div class="actions">
         <button id="simpleButton" type="button" class="btn btn-simple">
           <span class="btn-label">Gen Simple</span>
-          <span class="btn-note">Server only · throwaway root</span>
+          <span class="btn-note">Server only</span>
         </button>
         <button id="completeButton" type="button" class="btn btn-complete">
           <span class="btn-label">Gen Complete</span>
@@ -1047,14 +1047,15 @@
           common name (CN) and, when it is a valid DNS name, the subject alternative name (SAN).
         </li>
         <li>
-          <strong>Pick a bundle.</strong> Gen Simple gives you a throwaway
-          <code>server.crt</code> and <code>server.key</code>. Gen Complete adds a root CA and a
-          client certificate for mutual TLS.
+          <strong>Pick a bundle.</strong> Gen Simple gives you a
+          <code>server.crt</code> and <code>server.key</code> only. Gen Complete adds a root CA and a
+          client certificate for mutual TLS (mTLS).
         </li>
         <li>
-          <strong>Trust the root, then configure your server.</strong> Import
-          <code>root.crt</code> into your operating system or browser trust store, then point
-          nginx, Caddy, Node, or Python at <code>server.crt</code> and <code>server.key</code>.
+          <strong>Use the server cert only or all three pairs for mTLS.</strong> 
+          For mTLS import <code>root.crt</code> into your operating system or browser trust store, 
+          run your server with <code>server.crt</code> and <code>server.key</code>,
+          and make your clients use <code>client.crt</code> and <code>client.key</code>.
         </li>
       </ol>
     </section>
